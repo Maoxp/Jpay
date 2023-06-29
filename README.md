@@ -11,7 +11,7 @@
         <img alt="" src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg"/>
      </a>
      <a target="_blank" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">
-        <img alt="" src="https://img.shields.io/badge/JDK-1.7+-green.svg"/>
+        <img alt="" src="https://img.shields.io/badge/JDK-1.8+-green.svg"/>
      </a>
 </p>
 
