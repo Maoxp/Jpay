@@ -7,38 +7,11 @@
 </p>
 
 <p align="center">
-     <a target="_blank" href="https://gitee.com/javen205/IJPay">
-     	<img alt="" src="https://gitee.com/Javen205/IJPay/badge/star.svg?theme=gvp"/>
-     </a>
-     <a target="_blank" href="https://github.com/Javen205/IJPay">
-        <img alt="" src="https://img.shields.io/github/stars/Javen205/IJPay.svg?style=social&label=Stars"/>
-     </a>
-     <a target="_blank" href="https://www.apache.org/licenses/LICENSE-2.0">
+      <a target="_blank" href="https://www.apache.org/licenses/LICENSE-2.0">
         <img alt="" src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg"/>
      </a>
      <a target="_blank" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">
         <img alt="" src="https://img.shields.io/badge/JDK-1.7+-green.svg"/>
-     </a>
-     <a target="_blank" href="https://travis-ci.org/Javen205/IJPay">
-        <img alt="" src="https://travis-ci.org/Javen205/IJPay.svg?branch=master"/>
-     </a>
-     <a target="_blank" href="https://www.codacy.com/app/Javen205/IJPay?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Javen205/IJPay&amp;utm_campaign=Badge_Grade">
-        <img alt="" src="https://api.codacy.com/project/badge/Grade/b76239f6b2c84564b30a815aea71e8a7"/>
-     </a>
-     <a target="_blank" href="https://maven-badges.herokuapp.com/maven-central/com.github.javen205/IJPay">
-        <img alt="" src="https://maven-badges.herokuapp.com/maven-central/com.github.javen205/IJPay/badge.svg"/>
-     </a> 
-     <a target="_blank" href="https://javen205.gitee.io/ijpay/guide/donate">
-        <img alt="" src="https://img.shields.io/badge/IJPay%20Author-Javen-ff69b4.svg"/>
-     </a>
-     <a target="_blank" href="https://github.com/Javen205/donate">
-        <img alt="" src="https://img.shields.io/badge/Donate-WeChat-%23ff3f59.svg"/>
-     </a> 
-     <a target="_blank" href="https://gitter.im/Javen205/IJPay?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge">
-        <img alt="" src="https://badges.gitter.im/Javen205/IJPay.svg"/>
-     </a>
-     <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=44c2b0331f1bdca6c9d404e863edd83973fa97224b79778db79505fc592f00bc">
-         <img alt="" src="https://img.shields.io/badge/IJPay%20%E4%BA%A4%E6%B5%81%E7%BE%A4-723992875-fba7f9.svg"/>
      </a>
 </p>
 
