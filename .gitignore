@@ -1,0 +1,47 @@
+# [ java 字节码 ]
+*.class
+
+# [ 日志文件 ]
+logs/
+*.log
+
+# [ 打包压缩文件 ]
+*.jar
+*.war
+*.zip
+*.tar.gz
+*.rar
+
+# [ 操作系统缓存和备份 ]
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# [ eclipse ]
+.metadata
+bin/
+.settings
+.classpath
+.project
+
+# [IDEA]
+.idea
+*.iws
+*.iml
+*.ipr
+
+# [MAVEN]
+target/
+
+# [Jrebel]
+rebel.xml
+
+# [vscode IDE]
+.vscode/
+
+# [mac]
+.DS_Store
+
+

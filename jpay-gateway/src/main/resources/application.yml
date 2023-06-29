@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: 'JPay-Gateway'
+  redis:
+    database: 1
+
+
+wx:
+  pay:
+    app-id: appId2
+    mch-id: mchId2
+    api-key: apiKey2
+    api-key-v3: apiKey3
+    key-path: 'apiclient_key.pem 商户 key 绝对路径'
+    cert-path: 'capiclient_cert.pem 商户证书绝对路径'
+    cert-p12-path: 'apiclient_cert.p12 证书绝对路径'
+    platform-cert-path: 'wx_cert.pem 微信平台证书绝对路径'
+    domain: 'https://xxx.com'

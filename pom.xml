@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion> <!-- POM模型版本 -->
+
+    <groupId>com.github.maoxp</groupId> <!-- 组织名, 类似于包名 -->
+    <artifactId>jpay</artifactId>  <!-- 项目名称  -->
+    <packaging>pom</packaging> <!-- 项目的最终打包类型/发布形式, 可选[jar, war, pom, maven-plugin]等 -->
+    <name>jpay</name>
+    <version>Final</version><!-- pom版本号/项目总版本号， 每个子项目引入的版本号必须一致。  最外层的pom.xml版本号保持不变，始终为Final版本。 更新版本请更改isys.version属性  -->
+    <description>Spring Boot multi多模块XX系统</description> <!-- 项目描述 -->
+
+    <!-- 继承：Spring Boot Parent -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.6</version>
+    </parent>
+
+    <!-- 声明子项目 -->
+    <modules>
+        <module>jpay-core</module>
+        <module>jpay-service</module>
+        <module>jpay-gateway</module>
+        <module>jpay-wx</module>
+    </modules>
+
+    <!-- 配置属性声明, 支持自定义参数 -->
+    <properties>
+        <isys.version>1.0.0</isys.version> <!-- 指定当前[项目]版本号 -->
+        <projectRootDir>${basedir}</projectRootDir>
+        <java.version>1.8</java.version> <!-- 指定java版本号 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- 项目构建输出编码 -->
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+
+        <!-- 其他工具包 -->
+        <druid.version>1.2.9</druid.version>
+        <mybatis.plus.starter.version>3.3.2</mybatis.plus.starter.version>
+        <mapstruct.version>1.2.0.Final</mapstruct.version>
+        <lombok.version>1.18.10</lombok.version>
+        <hutool.util.version>5.8.16</hutool.util.version>
+        <jackson.datatype.version>2.13.4</jackson.datatype.version>
+        <mysql.version>8.0.28</mysql.version> <!-- 覆写 spring-boot-dependencies 的依赖版本号 -->
+    </properties>
+
+    <!-- 依赖包管理， 按需添加 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis.plus.starter.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- 所有项目 项目依赖声明 -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <optional>true</optional>
+            <scope>provided</scope> <!-- 编译阶段生效，不需要打入包中 -->
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.util.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

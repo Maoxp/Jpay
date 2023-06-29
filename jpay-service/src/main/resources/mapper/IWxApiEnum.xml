@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geminiryne.single.application.core.mapper.BwRemindEventMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.github.maoxp.service.entity.BwRemindEvent">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="remark" property="remark" />
+        <result column="expired_flag" property="expiredFlag" />
+        <result column="expired_date" property="expiredDate" />
+        <result column="expired_time" property="expiredTime" />
+        <result column="remind_count" property="remindCount" />
+        <result column="before_day" property="beforeDay" />
+        <result column="before_hour" property="beforeHour" />
+        <result column="before_min" property="beforeMin" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, title, remark, expired_flag, expired_date, expired_time, remind_count, before_day, before_hour, before_min, create_time, update_time
+    </sql>
+
+</mapper>

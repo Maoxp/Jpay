@@ -1,0 +1,102 @@
+#################################
+# spring boot支持外部application.yml  读取优先级为：
+#   1、file:./config/（当前目录下的config文件夹）
+#   2、file:./（当前目录）
+#   3、classpath:/config/（classpath下的config目录）
+#   4、classpath:/（classpath根目录）
+#   建议： 如果是jar则放置到与jar相同的目录下，  如果解压文件放置到classpath: config目录下。 (需要将文件重命名为 application-dev.yml )
+#
+#   该yml文件只配置与环境相关的参数， 其他配置读取项目下的配置项
+#
+#################################
+server:
+  servlet:
+    context-path: / #设置应用的目录.  前缀需要带/, 无需设置后缀, 示例 【 /xxx 】 or 【 / 】
+
+spring:
+  servlet:
+    multipart:
+      enabled: true #是否启用http上传处理
+      max-file-size: 10MB #最大请求文件的大小
+      max-request-size: 20MB  #设置单个文件最大长度
+  mvc:
+    throw-exception-if-no-handler-found: true #出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
+  resources:
+    add-mappings: false #不要为我们工程中的资源文件建立映射
+  datasource:
+    name: "geminiRne"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.118.80.138:3306/geminiryne?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true
+    username: root
+    password: Wzl_2729446
+    type: com.alibaba.druid.pool.DruidDataSource  # 通过 spring.datasource.type 指定数据源
+    druid:
+      # 连接池配置项
+      initial-size: 5 #初始化时建立物理连接的个数
+      min-idle: 5 #最小连接池数量
+      max-active: 30 #最大连接池数量
+      max-wait: 60000 #获取连接时最大等待时间，单位毫秒
+      # 检测相关
+      test-while-idle: true # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      test-on-borrow: false # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      test-on-return: false # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      time-between-eviction-runs-millis: 60000 #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      min-evictable-idle-time-millis: 300000 #一个连接在池中,保持空闲而不被驱逐的最小时间，单位是毫秒
+      validation-query: SELECT 1 FROM DUAL  # 用来检测连接是否有效的sql，要求是一个查询语句
+      # 是否缓存preparedStatement
+      pool-prepared-statements: false # 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+      max-pool-prepared-statement-per-connection-size: 20 # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall' 用于防火墙
+      filters: stat,wall
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: true
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # Druid 监控的filter
+      web-stat-filter:
+        enabled: true
+      # Druid 监控管理后台的Servlet
+      stat-view-servlet:
+        enabled: true
+        allow:  # 设置白名单，不填则允许所有访问
+        url-pattern: /druid/*
+        # 控制台管理用户名和密码
+        login-username: admin
+        login-password: 123456
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true   # 慢SQL记录
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+  cache:
+    type: redis
+  redis:
+    host: 47.118.80.138
+    port: 53769
+    database: 2
+    timeout: 5000ms
+    password: myb-xxhmsc@redis
+
+ #日志配置参数。
+logging:
+  level:
+    root: info   #主日志级别
+    com.github.multi: debug   #该项目日志级别，当需要打印sql时请开启为debug
+  path: ./logs  #日志存放地址
+
+# mybatis-plus配置
+#mybatis-plus:
+#  mapper-locations: classpath:/mapper/*Mapper.xml  # MyBatis Mapper所对应的XML文件位置
+#  global-config:
+#    banner: false
+#    sql-parser-cache: true
+#    db-config:
+#      id-type: ASSIGN_ID # 主键类型
+#      table-prefix: "" # 配置MyBatis-Plus操作表的默认前缀
+#  configuration: # 动态sql控制台展示
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
