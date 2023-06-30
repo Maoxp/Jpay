@@ -1,4 +1,4 @@
-package com.github.maoxp.pay.config;
+package com.github.maoxp.pay.config.wx;
 
 import com.github.maoxp.wx.property.WxPayApiProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

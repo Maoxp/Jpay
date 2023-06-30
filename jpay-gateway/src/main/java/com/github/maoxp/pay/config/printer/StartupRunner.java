@@ -1,4 +1,4 @@
-package com.github.maoxp.pay.config;
+package com.github.maoxp.pay.config.printer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
