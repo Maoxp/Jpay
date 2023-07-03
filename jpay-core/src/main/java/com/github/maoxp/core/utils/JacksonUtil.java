@@ -1,10 +1,11 @@
 package com.github.maoxp.core.utils;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -33,7 +34,6 @@ import java.util.TimeZone;
 @Slf4j
 public final class JacksonUtil {
     private static final ObjectMapper mapper = new ObjectMapper();
-    private static final JacksonUtil jacksonUtil = new JacksonUtil();
 
     /**
      * 单例模式
@@ -41,25 +41,20 @@ public final class JacksonUtil {
     private JacksonUtil() {
         //LocalDatetime序列化
         JavaTimeModule timeModule = new JavaTimeModule();
-        timeModule.addDeserializer(LocalDate.class,
-                new LocalDateDeserializer(DateTimeFormatter.ofPattern(CS.DateFormat.YMD)));
-        timeModule.addDeserializer(LocalDateTime.class,
-                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(CS.DateFormat.YMD_HMS)));
-        timeModule.addSerializer(LocalDate.class,
-                new LocalDateSerializer(DateTimeFormatter.ofPattern(CS.DateFormat.YMD)));
-        timeModule.addSerializer(LocalDateTime.class,
-                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(CS.DateFormat.YMD_HMS)));
+        timeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DatePattern.NORM_DATETIME_FORMATTER));
+        timeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DatePattern.NORM_DATETIME_FORMATTER));
+
 
         mapper.registerModule(timeModule);
         mapper.setTimeZone(TimeZone.getTimeZone(CS.DateFormat.TIME_ZONE));
-        mapper.setDateFormat(new SimpleDateFormat(CS.DateFormat.YMD_HMS));
+        mapper.setDateFormat(new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN));
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public static JacksonUtil builder() {
-        return jacksonUtil;
+        return new JacksonUtil();
     }
 
     public ObjectMapper objectMapper() {

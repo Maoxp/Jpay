@@ -14,5 +14,6 @@ public class PayKitTest {
     @Test
     public void checkCertificateIsValid() {
         System.out.println(RandomUtil.getOutTradeNo());
+        System.out.println(Runtime.getRuntime().availableProcessors());
     }
 }

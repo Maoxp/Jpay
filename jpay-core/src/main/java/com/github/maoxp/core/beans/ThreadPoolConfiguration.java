@@ -18,21 +18,26 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Configuration
 public class ThreadPoolConfiguration {
     /**
+     * 获取当前机器的核数, 不一定准确 请根据实际场景 CPU密集 || IO 密集
+     */
+    public static final int cpuNum = Runtime.getRuntime().availableProcessors();
+
+    /**
      * 核心线程池大小，默认的核心线程的1，向线程池提交一个任务时，如果线程池已经创建的线程数小于核心线程数，
      * 即使此时存在空闲线程，也会通过创建一个新线程来执行新任务，知道创建的线程等于核心线程数时，如果有空闲线程，则使用空闲线程。
      */
-    private static final int CORE_POOL_SIZE = 50;
+    private static final int CORE_POOL_SIZE = 10;
 
     /**
      * 最大可创建的线程数
      * 默认的最大线程数是Integer.MAX_VALUE 即2<sup>31</sup>-1
      */
-    private static final int MAX_POOL_SIZE = 50;
+    private static final int MAX_POOL_SIZE = CORE_POOL_SIZE * 2;
 
     /**
      * 缓冲队列数，默认的缓冲队列数是Integer.MAX_VALUE 即2<sup>31</sup>-1，用于保存执行任务的阻塞队列。
      */
-    private static final int QUEUE_CAPACITY = 1000;
+    private static final int QUEUE_CAPACITY = 500;
 
     /**
      * 线程池维护线程所允许的空闲时间,默认的线程空闲时间为60秒。
@@ -85,9 +90,10 @@ public class ThreadPoolConfiguration {
     @Bean("taskExecutor")
     @SuppressWarnings("all")
     public ThreadPoolTaskExecutor taskExecutor() {
-
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        // 核心线程大小 默认区 CPU 数量
         taskExecutor.setCorePoolSize(CORE_POOL_SIZE);
+        // 最大线程大小 默认区 CPU * 2 数量
         taskExecutor.setMaxPoolSize(MAX_POOL_SIZE);
         taskExecutor.setQueueCapacity(QUEUE_CAPACITY);
         taskExecutor.setKeepAliveSeconds(KEEP_ALIVE_SECONDS);
@@ -99,10 +105,10 @@ public class ThreadPoolConfiguration {
          * <p>
          * allowCoreThreadTimeOut为false销毁机制：超过核心线程数时，而且（超过最大值或者timeout过），就会销毁。
          */
-        boolean allowCoreThreadTimeOut = false;
-        taskExecutor.setAllowCoreThreadTimeOut(allowCoreThreadTimeOut);
+        taskExecutor.setAllowCoreThreadTimeOut(false);
         taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-        //线程池初始化
+        taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+        taskExecutor.setAwaitTerminationSeconds(60);
         taskExecutor.initialize();
         return taskExecutor;
     }

@@ -47,8 +47,8 @@ import java.util.TimeZone;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     /**
-     * 添加自定义的格式化器到 Spring MVC 中
-     * <p>将请求参数的字符串值转换为目标类型，并将目标类型的值格式化为字符串，以便在响应中返回</p>
+     * 自定义的格式化器
+     * <p>支持 将请求参数的字符串值转换为目标类型，并将目标类型的值格式化为字符串，以便在响应中返回</p>
      * <ul>
      * <li>HH:mm:ss -> LocalTime</li>
      * <li>yyyy-MM-dd -> LocalDate</li>
@@ -97,8 +97,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         //support Java 8 LocalDatetime
         final JavaTimeModule timeJacksonModule = new JavaTimeModule();
-        timeJacksonModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(CS.DateFormat.YMD_HMS)));
-        timeJacksonModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN)));
+        timeJacksonModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DatePattern.NORM_DATETIME_FORMATTER));
+        timeJacksonModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DatePattern.NORM_DATETIME_FORMATTER));
 
         // 构建 Jackson ObjectMapper 的类实例
         ObjectMapper objectMapper = new Jackson2ObjectMapperBuilder()
