@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.github.maoxp.core.constants.CS;
+import com.github.maoxp.core.utils.RedisUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -29,7 +29,6 @@ import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebA
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -180,6 +179,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
             }
         }));
 
+        final String hget = RedisUtil.<String, String>hget("ss", "d");
+        System.out.println(hget);
         return mapper;
     }
 }

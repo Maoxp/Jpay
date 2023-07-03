@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * RequestOrRespLogAop
@@ -51,7 +52,7 @@ public final class RequestOrRespLogAop {
         log.info("\n<== 响应请求 [" + classWithMethod + "] \n"
                 + "<== 请求时间：" + this.reqTime + "\n"
                 + "<== 请求耗时：" + Double.parseDouble(respString) / 1000 + "s\n"
-                + "<== 响应体：" + JacksonUtil.builder().toJson(rvt)
+                + "<== 响应体：" + JacksonUtil.toJson(rvt)
         );
     }
 
@@ -63,7 +64,12 @@ public final class RequestOrRespLogAop {
      */
     @Before(value = "aspectPointcut()")
     public void getControllerBeforeInfoLog(JoinPoint joinPoint) {
-        final HttpServletRequest request = WebUtil.getRequest();
+        final Optional<HttpServletRequest> requestOptional = WebUtil.getRequest();
+        if (!requestOptional.isPresent()) {
+            log.error("拦截请求参数，操作无效，因无法Get HttpServletRequest");
+            return;
+        }
+        final HttpServletRequest request = requestOptional.get();
 
         this.req = System.currentTimeMillis();
         this.reqTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
@@ -83,7 +89,7 @@ public final class RequestOrRespLogAop {
 
         String paramBody = "{}";
         if (args != null && args.length != 0) {
-            paramBody = JacksonUtil.builder().toJson(args[0]);
+            paramBody = JacksonUtil.toJson(args[0]);
         }
         log.info("\n==> 拦截请求 [" + classWithMethod + "]  \n"
                 + "==> Ip Address：" + WebUtil.getClientIp(request) + "\n"

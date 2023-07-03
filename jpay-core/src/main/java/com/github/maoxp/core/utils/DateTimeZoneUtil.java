@@ -1,13 +1,12 @@
 package com.github.maoxp.core.utils;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.xkzhangsan.time.converter.DateTimeConverterUtil;
 import com.xkzhangsan.time.formatter.DateTimeFormatterUtil;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Date;
 
 /**
  * DateTimeZoneUtil
@@ -77,31 +76,31 @@ public class DateTimeZoneUtil implements Serializable {
         return time;
     }
 
-
-    public static void main(String[] args) throws Exception {
-        String timeZone = dateToTimeZone(System.currentTimeMillis() + 1000 * 60 * 3);
-        System.out.println("timeZone: " + timeZone);
-        String timeZone2 = dateToTimeZone(new Date());
-        System.out.println("timeZone2: " + timeZone2);
-        String date = timeZoneDateToStr(timeZone);
-        System.out.println("date: " + date);
-        System.out.println(DateUtil.parse(date).toDateStr());
-
-
-        Map<String, Date> map = new HashMap<>();
-        map.put("date1", new Date());
-        map.put("date2", new Date(System.currentTimeMillis() - 1000000));
-        map.put("date3", new Date(System.currentTimeMillis() + 1000000));
-
-        // 使用 Comparator.comparing 方法创建一个比较器，比较日期的大小
-        Comparator<Map.Entry<String, Date>> comparator = Comparator.comparing(Map.Entry::getValue);
-
-        // 使用 Collections.max 方法找到最大的日期
-        Map.Entry<String, Date> maxEntry = Collections.max(map.entrySet(), comparator);
-        System.out.println("最大的日期：" + maxEntry.getKey() + " - " + maxEntry.getValue());
-
-        // 使用 Collections.min 方法找到最小的日期
-        Map.Entry<String, Date> minEntry = Collections.min(map.entrySet(), comparator);
-        System.out.println("最小的日期：" + minEntry.getKey() + " - " + minEntry.getValue());
-    }
+//
+//    public static void main(String[] args) throws Exception {
+//        String timeZone = dateToTimeZone(System.currentTimeMillis() + 1000 * 60 * 3);
+//        System.out.println("timeZone: " + timeZone);
+//        String timeZone2 = dateToTimeZone(new Date());
+//        System.out.println("timeZone2: " + timeZone2);
+//        String date = timeZoneDateToStr(timeZone);
+//        System.out.println("date: " + date);
+//        System.out.println(DateUtil.parse(date).toDateStr());
+//
+//
+//        Map<String, Date> map = new HashMap<>();
+//        map.put("date1", new Date());
+//        map.put("date2", new Date(System.currentTimeMillis() - 1000000));
+//        map.put("date3", new Date(System.currentTimeMillis() + 1000000));
+//
+//        // 使用 Comparator.comparing 方法创建一个比较器，比较日期的大小
+//        Comparator<Map.Entry<String, Date>> comparator = Comparator.comparing(Map.Entry::getValue);
+//
+//        // 使用 Collections.max 方法找到最大的日期
+//        Map.Entry<String, Date> maxEntry = Collections.max(map.entrySet(), comparator);
+//        System.out.println("最大的日期：" + maxEntry.getKey() + " - " + maxEntry.getValue());
+//
+//        // 使用 Collections.min 方法找到最小的日期
+//        Map.Entry<String, Date> minEntry = Collections.min(map.entrySet(), comparator);
+//        System.out.println("最小的日期：" + minEntry.getKey() + " - " + minEntry.getValue());
+//    }
 }

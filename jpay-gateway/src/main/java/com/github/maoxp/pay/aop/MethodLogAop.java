@@ -40,13 +40,13 @@ public final class MethodLogAop {
         String invokingMethodName = method.getName();                       // 类的方法名
         String classAndMethodName = invokingClass + "." + invokingMethodName;
 
-        log.info("\n==> Service请求 - [{}]\n ==> 请求时间：{}\n ==> 形参值：{}\n", classAndMethodName, reqTime, JacksonUtil.builder().toJson(args));
+        log.info("\n==> Service请求 - [{}]\n ==> 请求时间：{}\n ==> 形参值：{}\n", classAndMethodName, reqTime, JacksonUtil.toJson(args));
 
         // 执行方法
         Object result = point.proceed();
 
         String respString = String.valueOf(System.currentTimeMillis() - req);
-        log.info("\n==> Service响应 - [{}]\n ==> 耗时：{}s\n ==>  返回参数：{}\n", classAndMethodName, Double.parseDouble(respString) / 1000, JacksonUtil.builder().toJson(result));
+        log.info("\n==> Service响应 - [{}]\n ==> 耗时：{}s\n ==>  返回参数：{}\n", classAndMethodName, Double.parseDouble(respString) / 1000, JacksonUtil.toJson(result));
         return result;
     }
 }

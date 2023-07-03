@@ -1,13 +1,13 @@
 package com.github.maoxp.core.exception;
 
 /**
- * Class: BaseResultEnum
+ * ExceptionCodeEnum
  *
  * @author mxp
  * @date 2022年07月28日 16:51
  * @since JDK 1.8
  */
-public enum ExceptionEnum {
+public enum ExceptionCodeEnum {
     UNKNOWN_ERROR("9999", "未知错误"),
     RUNTIME("9998", "运行时异常"),
     NPE("9997", "空指针异常"),
@@ -36,7 +36,7 @@ public enum ExceptionEnum {
     private final String code;
     private final String message;
 
-    ExceptionEnum(String code, String message) {
+    ExceptionCodeEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

@@ -1,12 +1,15 @@
 package com.github.maoxp.core.utils;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,47 +20,55 @@ import org.springframework.stereotype.Component;
  * @since JDK 1.8
  */
 @Component
-public class SpringBeansUtil implements ApplicationContextAware {
+@Lazy(false)
+@Slf4j
+public class SpringBeansUtil implements ApplicationContextAware, DisposableBean {
     /**
      * 上下文对象实例
      */
-    @Setter
-    @Getter
     private static ApplicationContext context;
-    
+
+    /**
+     * 实现ApplicationContextAware接口, 注入Context到静态变量中.
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if (SpringBeansUtil.context == null) {
-            setContext(applicationContext);
+            SpringBeansUtil.context = applicationContext;
         }
     }
 
-    /** 获取applicationContext */
+    /**
+     * 获取applicationContext
+     */
     public static ApplicationContext getApplicationContext() {
         return context;
     }
 
-    /** 通过name获取 Bean. */
-    public static Object getBean(String name) throws BeansException {
-        if(!containsBean(name)){
+    /**
+     * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getBean(String name) throws BeansException {
+        if (!containsBean(name)) {
             return null;
         }
 
-        return getApplicationContext().getBean(name);
+        return (T) getApplicationContext().getBean(name);
     }
 
-    /** 通过class获取Bean. */
-    public static <T> T getBean(Class<T> clz) throws BeansException {
-        try {
-            return getApplicationContext().getBean(clz);
-        } catch (BeansException e) {
-            return null;
-        }
+    /**
+     * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     */
+    public static <T> T getBean(Class<T> clz) {
+        return getApplicationContext().getBean(clz);
     }
 
-    /** 通过name,以及Clazz返回指定的Bean */
-    public static <T> T getBean(String name, Class<T> clazz){
-        if(!getApplicationContext().containsBean(name)){
+    /**
+     * 通过name,以及Clazz返回指定的Bean
+     */
+    public static <T> T getBean(String name, Class<T> clazz) {
+        if (!getApplicationContext().containsBean(name)) {
             return null;
         }
         return getApplicationContext().getBean(name, clazz);
@@ -72,6 +83,38 @@ public class SpringBeansUtil implements ApplicationContextAware {
     public static boolean containsBean(String name) {
         return context.containsBean(name);
     }
+
+    /**
+     * 清除 {@link SpringBeansUtil} 中的ApplicationContext为Null.
+     */
+    public static void clearHolder() {
+        if (log.isDebugEnabled()) {
+            log.debug("清除SpringBeansUtil中的ApplicationContext: " + context);
+        }
+        context = null;
+    }
+
+    /**
+     * 发布事件
+     *
+     * @param event
+     */
+    public static void publishEvent(ApplicationEvent event) {
+        if (context == null) {
+            return;
+        }
+        context.publishEvent(event);
+    }
+
+    /**
+     * 实现DisposableBean接口, 在Context关闭时清理静态变量.
+     */
+    @Override
+    @SneakyThrows
+    public void destroy() {
+        SpringBeansUtil.clearHolder();
+    }
+
 
     /**
      * 判断以给定名字注册的bean定义是一个singleton还是一个prototype。 如果与给定名字相应的bean定义没有被找到，将会抛出一个异常（NoSuchBeanDefinitionException）

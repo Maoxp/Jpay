@@ -1,4 +1,4 @@
-package com.github.maoxp.core.beans;
+package com.github.maoxp.core.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

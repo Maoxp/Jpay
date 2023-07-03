@@ -2,7 +2,7 @@ package com.github.maoxp.pay.config;
 
 
 import com.github.maoxp.core.exception.BizException;
-import com.github.maoxp.core.exception.ExceptionEnum;
+import com.github.maoxp.core.exception.ExceptionCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
@@ -73,40 +73,40 @@ public class GlobalExceptionConfiguration {
     public ResponseEntity<?> servletException(Exception e) {
         // 首先根据请求 Url 查找有没有对应的控制器，若没有则会抛该异常，也就是大家非常熟悉的 404 异常。
         if (e instanceof NoHandlerFoundException) {
-            return resultFormat(ExceptionEnum.NO_HANDLER_FOUND, e, HttpStatus.NOT_FOUND);
+            return resultFormat(ExceptionCodeEnum.NO_HANDLER_FOUND, e, HttpStatus.NOT_FOUND);
         }
         // 若匹配到了（匹配结果是一个列表，不同的是 http 方法不同，如：Get、Post 等），则尝试将请求的 http 方法与列表的控制器做匹配，若没有对应 http 方法的控制器，则抛该异常。
         else if (e instanceof HttpRequestMethodNotSupportedException) {
-            return resultFormat(ExceptionEnum.HTTP_REQUEST_METHOD_NOT_SUPPORTED, e, HttpStatus.METHOD_NOT_ALLOWED);
+            return resultFormat(ExceptionCodeEnum.HTTP_REQUEST_METHOD_NOT_SUPPORTED, e, HttpStatus.METHOD_NOT_ALLOWED);
         }
         // 然后再对请求头Content-type与服务器能支持的Content-type做比较。
         else if (e instanceof HttpMediaTypeNotSupportedException) {
-            return resultFormat(ExceptionEnum.HTTP_MEDIA_TYPE_NOT_SUPPORTED, e, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            return resultFormat(ExceptionCodeEnum.HTTP_MEDIA_TYPE_NOT_SUPPORTED, e, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         }
         // 未检测到路径参数。比如 url 为：/licence/{licenceId}，参数签名包含 @PathVariable("licenceId")。
         else if (e instanceof MissingPathVariableException) {
             log.error("400，缺少路径参数 " + ((MissingPathVariableException) e).getVariableName());
-            return resultFormat(ExceptionEnum.MISSING_PATH_VARIABLE, e, HttpStatus.BAD_REQUEST);
+            return resultFormat(ExceptionCodeEnum.MISSING_PATH_VARIABLE, e, HttpStatus.BAD_REQUEST);
         }
         // 缺少请求参数。比如定义了参数 @RequestParam("licenceId") String licenceId，但发起请求时，未携带该参数，则会抛该异常。
         if (e instanceof MissingServletRequestParameterException) {
             log.error("400，缺少请求参数 " + ((MissingServletRequestParameterException) e).getParameterName());
-            return resultFormat(ExceptionEnum.MISSING_SERVLET_REQUEST_PARAMETER, e, HttpStatus.BAD_REQUEST);
+            return resultFormat(ExceptionCodeEnum.MISSING_SERVLET_REQUEST_PARAMETER, e, HttpStatus.BAD_REQUEST);
         }
         // 参数类型匹配失败。比如：接收参数为 Long 型，但传入的值确是一个字符串，那么将会出现类型转换失败的情况，这时会抛该异常。
         else if (e instanceof TypeMismatchException) {
-            return resultFormat(ExceptionEnum.TYPE_MISMATCH, e, HttpStatus.BAD_REQUEST);
+            return resultFormat(ExceptionCodeEnum.TYPE_MISMATCH, e, HttpStatus.BAD_REQUEST);
         }
         // 与上面的 HttpMediaTypeNotSupportedException 举的例子完全相反。
         // 即请求头携带了"content-type: application/json;charset=UTF-8"，但接收参数却没有添加注解 @RequestBody，或者请求体携带的 json 串反序列化成 pojo 的过程中失败了，也会抛该异常。
         else if (e instanceof HttpMessageNotReadableException) {
-            return resultFormat(ExceptionEnum.HTTP_MESSAGE_NOT_READABLE, e, HttpStatus.BAD_REQUEST);
+            return resultFormat(ExceptionCodeEnum.HTTP_MESSAGE_NOT_READABLE, e, HttpStatus.BAD_REQUEST);
         }
         // 返回的 pojo 在序列化成 json 过程失败了，那么抛该异常。
         else if (e instanceof HttpMessageNotWritableException) {
-            return resultFormat(ExceptionEnum.CONVERSION_NOT_SUPPORTED, e, HttpStatus.INTERNAL_SERVER_ERROR);
+            return resultFormat(ExceptionCodeEnum.CONVERSION_NOT_SUPPORTED, e, HttpStatus.INTERNAL_SERVER_ERROR);
         } else if (e instanceof HttpMediaTypeNotAcceptableException) {
-            return resultFormat(ExceptionEnum.HTTP_MEDIA_TYPE_NOT_ACCEPTABLE, e, HttpStatus.NOT_ACCEPTABLE);
+            return resultFormat(ExceptionCodeEnum.HTTP_MEDIA_TYPE_NOT_ACCEPTABLE, e, HttpStatus.NOT_ACCEPTABLE);
         }
 
         log.error(String.format(EX_FORMAT, e.getClass().getName(), e.getMessage()), e);
@@ -178,7 +178,7 @@ public class GlobalExceptionConfiguration {
             ).append(";");
         }
         return resultFormat(
-                ExceptionEnum.METHOD_ARGUMENT_NOT_VALID.getCode(),
+                ExceptionCodeEnum.METHOD_ARGUMENT_NOT_VALID.getCode(),
                 msg.toString(),
                 HttpStatus.BAD_REQUEST);
     }
@@ -204,7 +204,7 @@ public class GlobalExceptionConfiguration {
      */
     @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<?> runtimeException(RuntimeException ex) {
-        return resultFormat(ExceptionEnum.RUNTIME, ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return resultFormat(ExceptionCodeEnum.RUNTIME, ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -215,7 +215,7 @@ public class GlobalExceptionConfiguration {
      */
     @ExceptionHandler({NullPointerException.class})
     public ResponseEntity<?> nullPointerException(NullPointerException ex) {
-        return resultFormat(ExceptionEnum.NPE, ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return resultFormat(ExceptionCodeEnum.NPE, ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -226,7 +226,7 @@ public class GlobalExceptionConfiguration {
      */
     @ExceptionHandler(ClassCastException.class)
     public ResponseEntity<?> classCastException(ClassCastException ex) {
-        return resultFormat(ExceptionEnum.CLASS_CAST, ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return resultFormat(ExceptionCodeEnum.CLASS_CAST, ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -237,7 +237,7 @@ public class GlobalExceptionConfiguration {
      */
     @ExceptionHandler(IOException.class)
     public ResponseEntity<?> handlerIOException(IOException ex) {
-        return resultFormat(ExceptionEnum.IO, ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return resultFormat(ExceptionCodeEnum.IO, ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -248,7 +248,7 @@ public class GlobalExceptionConfiguration {
      */
     @ExceptionHandler(NoSuchMethodException.class)
     public ResponseEntity<?> noSuchMethodException(NoSuchMethodException ex) {
-        return resultFormat(ExceptionEnum.NO_SUCH_METHOD, ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return resultFormat(ExceptionCodeEnum.NO_SUCH_METHOD, ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -259,7 +259,7 @@ public class GlobalExceptionConfiguration {
      */
     @ExceptionHandler(IndexOutOfBoundsException.class)
     public ResponseEntity<?> indexOutOfBoundsException(IndexOutOfBoundsException ex) {
-        return resultFormat(ExceptionEnum.INDEX_OUT_OF_BOUNDS, ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return resultFormat(ExceptionCodeEnum.INDEX_OUT_OF_BOUNDS, ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -270,7 +270,7 @@ public class GlobalExceptionConfiguration {
      */
     @ExceptionHandler({StackOverflowError.class})
     public ResponseEntity<?> stackOverflowError(StackOverflowError ex) {
-        return resultFormat(ExceptionEnum.STACKOVERFLOW_ERROR, ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return resultFormat(ExceptionCodeEnum.STACKOVERFLOW_ERROR, ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -281,7 +281,7 @@ public class GlobalExceptionConfiguration {
      */
     @ExceptionHandler({Exception.class})
     public ResponseEntity<?> handleException(Exception ex) {
-        return resultFormat(ExceptionEnum.UNKNOWN_ERROR, ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return resultFormat(ExceptionCodeEnum.UNKNOWN_ERROR, ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -305,7 +305,7 @@ public class GlobalExceptionConfiguration {
      * @param httpStatus     http状态码
      * @return ResponseEntity
      */
-    private <T extends Throwable> ResponseEntity<?> resultFormat(ExceptionEnum baseResultEnum, T ex, HttpStatus httpStatus) {
+    private <T extends Throwable> ResponseEntity<?> resultFormat(ExceptionCodeEnum baseResultEnum, T ex, HttpStatus httpStatus) {
         log.error(String.format(EX_FORMAT, ex.getClass().getName(), ex.getMessage()), ex);
         return new ResponseEntity<>(
 //                ResultBOUtil.fail(baseResultEnum.getCode(), baseResultEnum.getMessage())

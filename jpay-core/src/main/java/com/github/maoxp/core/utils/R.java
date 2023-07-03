@@ -10,25 +10,16 @@ import java.io.Serializable;
  * 响应信息主体
  *
  * @param <T>
- * @author lengleng
+ * @author maoxp
  */
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-@Accessors(chain = true)
+@Data
 public class R<T> implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -755725359379181157L;
 
-    @Getter
-    @Setter
     private int code;
 
-    @Getter
-    @Setter
     private String msg;
 
-    @Getter
-    @Setter
     private T data;
 
     public static <T> R<T> ok() {
@@ -41,6 +32,10 @@ public class R<T> implements Serializable {
 
     public static <T> R<T> ok(T data, String msg) {
         return restResult(data, CommonConstants.SUCCESS, msg);
+    }
+
+    public static <T> R<T> ok(T data, int code, String msg) {
+        return restResult(data, code, msg);
     }
 
     public static <T> R<T> failed() {
@@ -63,16 +58,11 @@ public class R<T> implements Serializable {
         return restResult(data, code, msg);
     }
 
-    public static <T> R<T> restResult(T data, int code, String msg) {
+    private static <T> R<T> restResult(T data, int code, String msg) {
         R<T> apiResult = new R<>();
         apiResult.setCode(code);
         apiResult.setData(data);
         apiResult.setMsg(msg);
         return apiResult;
     }
-
-    public Boolean isSuccess() {
-        return (this.code == CommonConstants.SUCCESS);
-    }
-
 }

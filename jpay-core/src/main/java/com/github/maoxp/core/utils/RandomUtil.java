@@ -1,5 +1,7 @@
 package com.github.maoxp.core.utils;
 
+import lombok.experimental.UtilityClass;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.UUID;
  * @author mxp
  * @since JDK 1.8
  */
+@UtilityClass
 public class RandomUtil {
     /**
      * 随机字符串
@@ -20,10 +23,7 @@ public class RandomUtil {
     private static final String STR_TEMP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final String ALL_TEMP = INT_TEMP + STR_TEMP;
 
-    private RandomUtil() {
-    }
-
-    private static final Random randomInstant = new Random();
+    private final Random randomInstant = new Random();
 
     /**
      * bound以内随机整数
@@ -31,7 +31,7 @@ public class RandomUtil {
      * @param bound 边界
      * @return int
      */
-    public static int rdmValue(int bound) {
+    public int rdmValue(int bound) {
         return randomInstant.nextInt(bound);
     }
 
@@ -42,7 +42,7 @@ public class RandomUtil {
      * @param <T>    范型
      * @return T
      */
-    public static <T> T rdmValue(List<T> values) {
+    public <T> T rdmValue(List<T> values) {
         int index = rdmValue(values.size());
         return values.get(index);
     }
@@ -54,7 +54,7 @@ public class RandomUtil {
      * @param <T>    范型
      * @return T
      */
-    public static <T> T rdmValue(T[] values) {
+    public <T> T rdmValue(T[] values) {
         int index = rdmValue(values.length);
         return values[index];
     }
@@ -65,7 +65,7 @@ public class RandomUtil {
      * @param length 长度
      * @return {String}
      */
-    public static String intStr(int length) {
+    public String intStr(int length) {
         char[] buffer = new char[length];
         for (int i = 0; i < length; i++) {
             buffer[i] = INT_TEMP.charAt(rdmValue(INT_TEMP.length()));
@@ -79,7 +79,7 @@ public class RandomUtil {
      * @param length 长度
      * @return {String}
      */
-    public static String alphaStr(int length) {
+    public String alphaStr(int length) {
         char[] buffer = new char[length];
         for (int i = 0; i < length; i++) {
             buffer[i] = STR_TEMP.charAt(rdmValue(STR_TEMP.length()));
@@ -93,7 +93,7 @@ public class RandomUtil {
      * @param length 最大长度
      * @return {String}
      */
-    public static String alphaAndIntStr(int length) {
+    public String alphaAndIntStr(int length) {
         char[] buffer = new char[length];
         for (int i = 0; i < length; i++) {
             buffer[i] = ALL_TEMP.charAt(rdmValue(ALL_TEMP.length()));
@@ -106,7 +106,7 @@ public class RandomUtil {
      *
      * @return {String}
      */
-    public static String passwdStr(int length) {
+    public String passwdStr(int length) {
         String str = "ABCDE#$@!FGHIJKLMN#$@!OPQRSTUVWXYZabc#$@!defghijklmnop#$@!qrstuvwxyz0123456789#$@!-^&";
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
@@ -122,7 +122,7 @@ public class RandomUtil {
      *
      * @return {String}
      */
-    public static String uuidStr() {
+    public String uuidStr() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
@@ -131,7 +131,7 @@ public class RandomUtil {
      *
      * @return {String}
      */
-    public static String getOutTradeNo() {
+    public String getOutTradeNo() {
         String localMillisecond = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMddHHmmssSSS"));
         return localMillisecond + System.currentTimeMillis();
     }
@@ -141,7 +141,7 @@ public class RandomUtil {
      *
      * @return {String}
      */
-    public static String getOutTradeNo(int length) {
+    public String getOutTradeNo(int length) {
         final String outTradeNo = getOutTradeNo();
         return outTradeNo.substring(0, length);
     }

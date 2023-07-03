@@ -10,18 +10,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.github.maoxp.core.constants.CS;
-import com.github.maoxp.core.exception.BizException;
+import com.github.maoxp.core.exception.CheckedException;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 /**
@@ -32,32 +28,24 @@ import java.util.TimeZone;
  * @since JDK 1.8
  */
 @Slf4j
-public final class JacksonUtil {
+@UtilityClass
+public class JacksonUtil {
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    /**
-     * 单例模式
-     */
-    private JacksonUtil() {
-        //LocalDatetime序列化
+    static {
         JavaTimeModule timeModule = new JavaTimeModule();
         timeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DatePattern.NORM_DATETIME_FORMATTER));
         timeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DatePattern.NORM_DATETIME_FORMATTER));
 
-
         mapper.registerModule(timeModule);
-        mapper.setTimeZone(TimeZone.getTimeZone(CS.DateFormat.TIME_ZONE));
+        mapper.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
         mapper.setDateFormat(new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN));
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public static JacksonUtil builder() {
-        return new JacksonUtil();
-    }
-
-    public ObjectMapper objectMapper() {
+    public ObjectMapper getObjectMapper() {
         return mapper;
     }
 
@@ -82,7 +70,7 @@ public final class JacksonUtil {
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new BizException("Jackson转换字符串（String）过程失败", e);
+            throw new CheckedException("Jackson转换字符串（String）过程失败", e);
         }
     }
 
@@ -100,7 +88,7 @@ public final class JacksonUtil {
         try {
             return mapper.readValue(json, clazz);
         } catch (JsonProcessingException e) {
-            throw new BizException("Jackson转换对象（Object）过程失败", e);
+            throw new CheckedException("Jackson转换对象（Object）过程失败", e);
         }
     }
 
@@ -116,7 +104,7 @@ public final class JacksonUtil {
         try {
             return mapper.readValue(listStr, typeReference);
         } catch (JsonProcessingException e) {
-            throw new BizException("Jackson转换Object过程失败", e);
+            throw new CheckedException("Jackson转换Object过程失败", e);
         }
     }
 }
